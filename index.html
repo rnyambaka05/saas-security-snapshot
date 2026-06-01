@@ -1,0 +1,1349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>SaaS Security Snapshot | Cyber Hound Security</title>
+
+  <style>
+    :root {
+      --bg: #030303;
+      --bg-2: #070707;
+      --panel: rgba(255, 255, 255, 0.055);
+      --panel-strong: rgba(255, 255, 255, 0.085);
+      --border: rgba(255, 255, 255, 0.13);
+      --border-soft: rgba(255, 255, 255, 0.075);
+
+      --red: #e50914;
+      --red-bright: #ff2637;
+      --red-dark: #7a0008;
+
+      --white: #ffffff;
+      --silver: #d8d8d8;
+      --muted: #a8a8a8;
+      --soft: #d0d0d0;
+
+      --steel: #8fa0b8;
+      --blue: #4f6df5;
+      --gold: #d8b76a;
+      --cyan: #76e4f7;
+
+      --max: 1160px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 12% 0%, rgba(255, 0, 35, 0.18), transparent 28%),
+        radial-gradient(circle at 88% 10%, rgba(79, 109, 245, 0.13), transparent 28%),
+        radial-gradient(circle at 40% 88%, rgba(216, 183, 106, 0.07), transparent 30%),
+        #030303;
+      color: var(--white);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.026) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.026) 1px, transparent 1px);
+      background-size: 58px 58px;
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,0.9), transparent 76%);
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      opacity: 0.035;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 300 300' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .page {
+      position: relative;
+      z-index: 2;
+    }
+
+    .container {
+      width: min(var(--max), calc(100% - 40px));
+      margin: 0 auto;
+    }
+
+    .progress-line {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, var(--red), var(--blue), var(--gold));
+      transform-origin: left;
+      transform: scaleX(0);
+      z-index: 20;
+      box-shadow: 0 0 18px rgba(255, 0, 35, 0.4);
+    }
+
+    .topbar {
+      padding: 34px 0 18px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .topbar img {
+      width: min(460px, 92vw);
+      height: auto;
+      display: block;
+      filter:
+        drop-shadow(0 0 18px rgba(255, 255, 255, 0.08))
+        drop-shadow(0 0 36px rgba(255, 0, 35, 0.24));
+      animation: fadeDown 0.8s ease both;
+    }
+
+    @keyframes fadeDown {
+      from {
+        opacity: 0;
+        transform: translateY(-12px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .hero {
+      padding: 72px 0 84px;
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 58px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      width: fit-content;
+      border: 1px solid rgba(216, 183, 106, 0.34);
+      background: rgba(216, 183, 106, 0.09);
+      color: #f4e6bd;
+      padding: 11px 15px;
+      border-radius: 999px;
+      font-size: 12px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      font-weight: 900;
+      margin-bottom: 28px;
+    }
+
+    .eyebrow span {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--gold);
+      box-shadow: 0 0 18px rgba(216, 183, 106, 0.9);
+    }
+
+    h1 {
+      font-size: clamp(54px, 8vw, 112px);
+      line-height: 0.88;
+      letter-spacing: -0.08em;
+      max-width: 780px;
+      margin-bottom: 28px;
+    }
+
+    .hero-text {
+      color: #d2d2d2;
+      font-size: clamp(18px, 2vw, 22px);
+      line-height: 1.58;
+      max-width: 680px;
+      margin-bottom: 34px;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .btn {
+      border: 0;
+      outline: 0;
+      cursor: pointer;
+      border-radius: 999px;
+      padding: 15px 22px;
+      font-weight: 900;
+      letter-spacing: 0.01em;
+      transition: 0.25s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-main {
+      background: linear-gradient(135deg, var(--red), #8f0009);
+      color: white;
+      box-shadow: 0 18px 55px rgba(255, 0, 35, 0.32);
+    }
+
+    .btn-soft {
+      background: rgba(255,255,255,0.06);
+      color: white;
+      border: 1px solid rgba(255,255,255,0.14);
+    }
+
+    .btn:hover {
+      transform: translateY(-3px);
+    }
+
+    .founder-card {
+      position: relative;
+      border-radius: 38px;
+      border: 1px solid var(--border);
+      min-height: 560px;
+      overflow: hidden;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.08), rgba(255,255,255,0.025));
+      box-shadow:
+        0 40px 120px rgba(0,0,0,0.62),
+        inset 0 0 0 1px rgba(255,255,255,0.03);
+    }
+
+    .founder-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to top, rgba(0,0,0,0.9), rgba(0,0,0,0.2) 58%, rgba(0,0,0,0.15)),
+        radial-gradient(circle at 20% 0%, rgba(255, 0, 35, 0.22), transparent 38%),
+        radial-gradient(circle at 80% 20%, rgba(79, 109, 245, 0.15), transparent 32%);
+      z-index: 2;
+    }
+
+    .founder-card img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.88;
+      filter: saturate(0.96) contrast(1.08);
+      transform: scale(1.02);
+    }
+
+    .founder-card-content {
+      position: absolute;
+      z-index: 3;
+      left: 28px;
+      right: 28px;
+      bottom: 28px;
+      display: grid;
+      gap: 18px;
+    }
+
+    .founder-note {
+      border: 1px solid rgba(255,255,255,0.13);
+      background: rgba(0,0,0,0.54);
+      backdrop-filter: blur(16px);
+      border-radius: 22px;
+      padding: 20px;
+    }
+
+    .founder-note small {
+      color: var(--gold);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      font-weight: 950;
+    }
+
+    .founder-note h3 {
+      margin-top: 9px;
+      margin-bottom: 10px;
+      font-size: 23px;
+      letter-spacing: -0.03em;
+    }
+
+    .founder-note p {
+      color: #d4d4d4;
+      line-height: 1.6;
+      font-size: 14.5px;
+    }
+
+    .section {
+      padding: 94px 0;
+    }
+
+    .section-header {
+      margin-bottom: 46px;
+      max-width: 880px;
+    }
+
+    .kicker {
+      color: var(--red-bright);
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      font-size: 12px;
+      font-weight: 950;
+      margin-bottom: 14px;
+    }
+
+    h2 {
+      font-size: clamp(38px, 5vw, 72px);
+      line-height: 0.96;
+      letter-spacing: -0.065em;
+      margin-bottom: 18px;
+    }
+
+    .section-header p {
+      color: #cfcfcf;
+      font-size: 18px;
+      line-height: 1.65;
+      max-width: 790px;
+    }
+
+    .snapshot-section {
+      position: relative;
+      padding: 104px 0;
+    }
+
+    .snapshot-stage {
+      position: relative;
+      border-radius: 46px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background:
+        radial-gradient(circle at 12% 0%, rgba(255,0,35,0.18), transparent 34%),
+        radial-gradient(circle at 88% 20%, rgba(79,109,245,0.13), transparent 24%),
+        radial-gradient(circle at 50% 100%, rgba(216,183,106,0.09), transparent 30%),
+        linear-gradient(145deg, rgba(255,255,255,0.075), rgba(255,255,255,0.025));
+      overflow: hidden;
+      padding: clamp(26px, 5vw, 58px);
+      box-shadow: 0 40px 140px rgba(0,0,0,0.6);
+    }
+
+    .snapshot-stage::before {
+      content: "";
+      position: absolute;
+      inset: 22px;
+      border-radius: 34px;
+      border: 1px solid rgba(255,255,255,0.055);
+      pointer-events: none;
+    }
+
+    .snapshot-stage > * {
+      position: relative;
+      z-index: 2;
+    }
+
+    .snapshot-intro {
+      display: grid;
+      grid-template-columns: 1fr 0.65fr;
+      gap: 34px;
+      align-items: end;
+      margin-bottom: 46px;
+    }
+
+    .snapshot-intro p {
+      color: #cfcfcf;
+      font-size: 18px;
+      line-height: 1.65;
+      max-width: 790px;
+    }
+
+    .snapshot-meta {
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(0,0,0,0.26);
+      border-radius: 24px;
+      padding: 22px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .meta-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      color: #c9c9c9;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      padding-bottom: 12px;
+      font-size: 14px;
+    }
+
+    .meta-row:last-child {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .meta-row strong {
+      color: white;
+    }
+
+    .checkpoint-list {
+      display: grid;
+      gap: 30px;
+    }
+
+    .checkpoint-card {
+      position: relative;
+      display: grid;
+      grid-template-columns: 380px 1fr;
+      gap: 32px;
+      align-items: stretch;
+      border-radius: 34px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.082), rgba(255,255,255,0.03));
+      padding: 28px;
+      overflow: hidden;
+      transition: 0.3s ease;
+    }
+
+    .checkpoint-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 0% 0%, rgba(255, 0, 35, 0.14), transparent 35%),
+        radial-gradient(circle at 100% 0%, rgba(79, 109, 245, 0.1), transparent 30%);
+      opacity: 0;
+      transition: 0.3s ease;
+    }
+
+    .checkpoint-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(255, 38, 55, 0.5);
+    }
+
+    .checkpoint-card:hover::before {
+      opacity: 1;
+    }
+
+    .checkpoint-image {
+      position: relative;
+      z-index: 1;
+      border-radius: 26px;
+      min-height: 320px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: #111;
+    }
+
+    .checkpoint-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.84;
+      filter: saturate(0.95) contrast(1.08);
+      transition: 0.45s ease;
+    }
+
+    .checkpoint-card:hover .checkpoint-image img {
+      transform: scale(1.04);
+      opacity: 0.92;
+    }
+
+    .checkpoint-image::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to top, rgba(0,0,0,0.82), transparent 58%),
+        radial-gradient(circle at 50% 0%, rgba(255,0,35,0.2), transparent 45%);
+    }
+
+    .image-tag {
+      position: absolute;
+      z-index: 2;
+      left: 16px;
+      right: 16px;
+      bottom: 16px;
+      border: 1px solid rgba(255,255,255,0.13);
+      background: rgba(0,0,0,0.55);
+      backdrop-filter: blur(14px);
+      border-radius: 16px;
+      padding: 12px 13px;
+      font-size: 13px;
+      color: #f1f1f1;
+      font-weight: 850;
+      line-height: 1.4;
+    }
+
+    .checkpoint-content {
+      position: relative;
+      z-index: 1;
+      padding: 4px 2px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .checkpoint-number {
+      color: var(--gold);
+      font-weight: 950;
+      letter-spacing: 0.16em;
+      font-size: 12px;
+      margin-bottom: 14px;
+      display: block;
+      text-transform: uppercase;
+    }
+
+    .checkpoint-content h3 {
+      font-size: clamp(32px, 4vw, 52px);
+      letter-spacing: -0.065em;
+      line-height: 0.98;
+      margin-bottom: 16px;
+    }
+
+    .checkpoint-summary {
+      color: #d2d2d2;
+      font-size: 17px;
+      line-height: 1.65;
+      margin-bottom: 24px;
+      max-width: 720px;
+    }
+
+    .action-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+
+    .action-item {
+      display: grid;
+      grid-template-columns: 165px 1fr;
+      gap: 16px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      padding-top: 14px;
+    }
+
+    .action-item:first-child {
+      border-top: 0;
+      padding-top: 0;
+    }
+
+    .action-item strong {
+      color: white;
+      font-size: 14px;
+      letter-spacing: 0.02em;
+    }
+
+    .action-item span {
+      color: #bdbdbd;
+      line-height: 1.6;
+      font-size: 15px;
+    }
+
+    .score-section {
+      position: relative;
+      padding: 108px 0;
+    }
+
+    .score-stage {
+      position: relative;
+      border-radius: 46px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background:
+        radial-gradient(circle at 12% 0%, rgba(255,0,35,0.28), transparent 34%),
+        radial-gradient(circle at 88% 20%, rgba(79,109,245,0.16), transparent 24%),
+        radial-gradient(circle at 50% 100%, rgba(216,183,106,0.12), transparent 30%),
+        linear-gradient(145deg, rgba(255,255,255,0.09), rgba(255,255,255,0.028));
+      overflow: hidden;
+      padding: clamp(28px, 5vw, 58px);
+      box-shadow: 0 40px 140px rgba(0,0,0,0.6);
+    }
+
+    .score-stage::before {
+      content: "";
+      position: absolute;
+      inset: 22px;
+      border-radius: 34px;
+      border: 1px solid rgba(255,255,255,0.06);
+      pointer-events: none;
+    }
+
+    .score-head {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      max-width: 890px;
+      margin: 0 auto 46px;
+    }
+
+    .score-head h2 {
+      margin-bottom: 18px;
+    }
+
+    .score-head p {
+      color: #d0d0d0;
+      font-size: 18px;
+      line-height: 1.65;
+    }
+
+    .score-layout {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 1fr 0.82fr;
+      gap: 26px;
+      align-items: start;
+    }
+
+    .rating-panel {
+      display: grid;
+      gap: 16px;
+    }
+
+    .rating-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 20px;
+      align-items: center;
+      border: 1px solid rgba(255,255,255,0.11);
+      background: rgba(0,0,0,0.3);
+      border-radius: 22px;
+      padding: 18px;
+      transition: 0.25s ease;
+    }
+
+    .rating-row:hover {
+      background: rgba(255,255,255,0.065);
+      border-color: rgba(255,38,55,0.32);
+    }
+
+    .rating-row label {
+      display: block;
+      font-weight: 950;
+      font-size: 16px;
+      margin-bottom: 4px;
+    }
+
+    .rating-row small {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .rating-buttons {
+      display: flex;
+      gap: 8px;
+    }
+
+    .rating-buttons button {
+      width: 38px;
+      height: 38px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.06);
+      color: white;
+      font-weight: 950;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    .rating-buttons button:hover,
+    .rating-buttons button.active {
+      background: var(--red);
+      border-color: var(--red);
+      transform: translateY(-2px);
+      box-shadow: 0 0 20px rgba(255,0,35,0.36);
+    }
+
+    .result-panel {
+      position: sticky;
+      top: 24px;
+      border-radius: 30px;
+      border: 1px solid rgba(255,255,255,0.13);
+      background:
+        radial-gradient(circle at top, rgba(255,0,35,0.22), transparent 38%),
+        rgba(0,0,0,0.34);
+      padding: 30px;
+      min-height: 432px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .score-label {
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      font-size: 12px;
+      font-weight: 950;
+      margin-bottom: 16px;
+    }
+
+    .score-number {
+      font-size: clamp(74px, 9vw, 118px);
+      line-height: 0.9;
+      letter-spacing: -0.08em;
+      font-weight: 950;
+      margin-bottom: 22px;
+    }
+
+    .score-number span {
+      color: var(--muted);
+      font-size: 30px;
+      letter-spacing: -0.03em;
+    }
+
+    .result-title {
+      font-size: 25px;
+      line-height: 1.1;
+      letter-spacing: -0.035em;
+      font-weight: 950;
+      margin-bottom: 14px;
+    }
+
+    .result-copy {
+      color: #cfcfcf;
+      line-height: 1.65;
+      font-size: 16px;
+    }
+
+    .score-scale {
+      display: grid;
+      gap: 10px;
+      margin-top: 28px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      padding-top: 20px;
+    }
+
+    .scale-item {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      color: #c8c8c8;
+      font-size: 13px;
+    }
+
+    .scale-item strong {
+      color: white;
+    }
+
+    .final-panel {
+      position: relative;
+      border-radius: 42px;
+      border: 1px solid var(--border);
+      background:
+        radial-gradient(circle at 82% 0%, rgba(255,0,35,0.22), transparent 34%),
+        radial-gradient(circle at 0% 100%, rgba(79,109,245,0.13), transparent 32%),
+        linear-gradient(145deg, rgba(255,255,255,0.075), rgba(255,255,255,0.025));
+      padding: clamp(28px, 5vw, 54px);
+      overflow: hidden;
+    }
+
+    .final-panel::before {
+      content: "";
+      position: absolute;
+      inset: 18px;
+      border-radius: 30px;
+      border: 1px solid rgba(255,255,255,0.06);
+      pointer-events: none;
+    }
+
+    .final-content {
+      position: relative;
+      z-index: 1;
+      max-width: 880px;
+    }
+
+    .final-content p {
+      color: #d2d2d2;
+      font-size: 18px;
+      line-height: 1.75;
+      margin-bottom: 20px;
+    }
+
+    .footer {
+      padding: 44px 0 60px;
+      color: #898989;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      font-size: 13px;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 1040px) {
+      .hero,
+      .snapshot-intro,
+      .score-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .checkpoint-card {
+        grid-template-columns: 1fr;
+      }
+
+      .checkpoint-image {
+        min-height: 360px;
+      }
+
+      .result-panel {
+        position: relative;
+        top: 0;
+      }
+    }
+
+    @media (max-width: 680px) {
+      .container {
+        width: min(100% - 28px, var(--max));
+      }
+
+      .topbar img {
+        width: min(340px, 92vw);
+      }
+
+      .hero {
+        padding-top: 42px;
+      }
+
+      .founder-card {
+        min-height: 470px;
+      }
+
+      .snapshot-stage,
+      .score-stage,
+      .final-panel,
+      .checkpoint-card {
+        border-radius: 26px;
+        padding: 22px;
+      }
+
+      .checkpoint-image {
+        min-height: 260px;
+      }
+
+      .action-item {
+        grid-template-columns: 1fr;
+        gap: 6px;
+      }
+
+      .rating-row {
+        grid-template-columns: 1fr;
+      }
+
+      .rating-buttons {
+        justify-content: space-between;
+      }
+
+      .rating-buttons button {
+        width: 42px;
+        height: 42px;
+      }
+
+      .footer {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="progress-line" id="progressLine"></div>
+
+  <main class="page">
+    <header class="container topbar">
+      <img src="logo.png" alt="Cyber Hound Security Logo" />
+    </header>
+
+    <section class="container hero">
+      <div class="hero-copy reveal">
+        <div class="eyebrow"><span></span> Security & Compliance Guide</div>
+
+        <h1>SaaS Security Snapshot</h1>
+
+        <p class="hero-text">
+          A practical guide for growing SaaS companies that want stronger security,
+          fewer blind spots, and cleaner compliance as they scale.
+        </p>
+
+        <div class="hero-actions">
+          <a class="btn btn-main" href="#snapshot">View the Snapshot</a>
+          <a class="btn btn-soft" href="#scorecard">Start the Scorecard</a>
+        </div>
+      </div>
+
+      <div class="founder-card reveal">
+        <img src="assets/randy.png" alt="Randy Nyambaka, Founder of Cyber Hound Security" />
+
+        <div class="founder-card-content">
+          <div class="founder-note">
+            <small>Created by Randy Nyambaka</small>
+            <h3>Founder, Cyber Hound Security</h3>
+            <p>
+              I created this snapshot because many growing SaaS companies do not realize
+              security has become too informal until a customer, audit, or security issue
+              forces the conversation.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="snapshot" class="snapshot-section">
+      <div class="container">
+        <div class="snapshot-stage">
+          <div class="snapshot-intro reveal">
+            <div>
+              <div class="kicker">Snapshot Breakdown</div>
+              <h2>Five security checkpoints worth reviewing.</h2>
+              <p>
+                These are the places where growing SaaS companies often lose visibility,
+                structure, or ownership as security and compliance become more important.
+                Each checkpoint includes why it matters, what to check, and a practical first step.
+              </p>
+            </div>
+
+            <div class="snapshot-meta">
+              <div class="meta-row">
+                <strong>Focus</strong>
+                <span>Security-first readiness</span>
+              </div>
+              <div class="meta-row">
+                <strong>Built for</strong>
+                <span>Growing SaaS teams</span>
+              </div>
+              <div class="meta-row">
+                <strong>Outcome</strong>
+                <span>Clearer risk visibility</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="checkpoint-list">
+            <article class="checkpoint-card reveal">
+              <div class="checkpoint-image">
+                <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=1200&q=85" alt="Access control and secure server infrastructure" />
+                <div class="image-tag">User access, vendor accounts, admin permissions</div>
+              </div>
+
+              <div class="checkpoint-content">
+                <span class="checkpoint-number">Checkpoint 01</span>
+                <h3>Access Control</h3>
+
+                <p class="checkpoint-summary">
+                  Access is one of the first places risk starts to build quietly. As teams grow,
+                  old employees, vendors, shared accounts, and admin permissions can stay active
+                  longer than they should.
+                </p>
+
+                <div class="action-grid">
+                  <div class="action-item">
+                    <strong>Why it matters</strong>
+                    <span>Unnecessary access can expose sensitive systems without anyone noticing.</span>
+                  </div>
+
+                  <div class="action-item">
+                    <strong>What to check</strong>
+                    <span>Inactive users, admin roles, vendor accounts, shared credentials, and offboarding steps.</span>
+                  </div>
+
+                  <div class="action-item">
+                    <strong>Next step</strong>
+                    <span>Review who has access to critical systems and remove anything that no longer has a clear business reason.</span>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article class="checkpoint-card reveal">
+              <div class="checkpoint-image">
+                <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=85" alt="Security dashboard with monitoring analytics" />
+                <div class="image-tag">Alerts, logs, devices, suspicious activity</div>
+              </div>
+
+              <div class="checkpoint-content">
+                <span class="checkpoint-number">Checkpoint 02</span>
+                <h3>Security Visibility</h3>
+
+                <p class="checkpoint-summary">
+                  If no one is consistently watching security activity, issues can sit unnoticed.
+                  The risk is not always that something breaks immediately. The risk is not knowing
+                  what is happening until the problem is already bigger.
+                </p>
+
+                <div class="action-grid">
+                  <div class="action-item">
+                    <strong>Why it matters</strong>
+                    <span>Security problems become harder to control when they are found late.</span>
+                  </div>
+
+                  <div class="action-item">
+                    <strong>What to check</strong>
+                    <span>Alerts, logs, endpoint activity, suspicious sign-ins, unusual user behavior, and monitoring gaps.</span>
+                  </div>
+
+                  <div class="action-item">
+                    <strong>Next step</strong>
+                    <span>Confirm which alerts are being reviewed, who reviews them, and how quickly suspicious activity is escalated.</span>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article class="checkpoint-card reveal">
+              <div class="checkpoint-image">
+                <img src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=1200&q=85" alt="Team reviewing response process in meeting" />
+                <div class="image-tag">Response ownership, escalation, first steps</div>
+              </div>
+
+              <div class="checkpoint-content">
+                <span class="checkpoint-number">Checkpoint 03</span>
+                <h3>Incident Readiness</h3>
+
+                <p class="checkpoint-summary">
+                  When something happens, speed and clarity matter. If the response process is informal,
+                  small issues can create confusion, delays, and unnecessary damage.
+                </p>
+
+                <div class="action-grid">
+                  <div class="action-item">
+                    <strong>Why it matters</strong>
+                    <span>A slow response can turn a contained issue into a larger business problem.</span>
+                  </div>
+
+                  <div class="action-item">
+                    <strong>What to check</strong>
+                    <span>Who responds, who owns the issue, who gets notified, what gets checked first, and how decisions get made.</span>
+                  </div>
+
+                  <div class="action-item">
+                    <strong>Next step</strong>
+                    <span>Write down the first five steps your team would take if a suspicious login, data exposure, or endpoint alert happened today.</span>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article class="checkpoint-card reveal">
+              <div class="checkpoint-image">
+                <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1200&q=85" alt="Leadership team discussing risk ownership" />
+                <div class="image-tag">Ownership, reporting, remediation, follow-through</div>
+              </div>
+
+              <div class="checkpoint-content">
+                <span class="checkpoint-number">Checkpoint 04</span>
+                <h3>Risk Ownership</h3>
+
+                <p class="checkpoint-summary">
+                  Security gets missed when everyone is partially responsible but no one truly owns it.
+                  As the company grows, unclear ownership can cause remediation, reviews, reporting,
+                  and compliance work to fall behind.
+                </p>
+
+                <div class="action-grid">
+                  <div class="action-item">
+                    <strong>Why it matters</strong>
+                    <span>When ownership is unclear, important security work gets delayed or forgotten.</span>
+                  </div>
+
+                  <div class="action-item">
+                    <strong>What to check</strong>
+                    <span>Who owns access reviews, vulnerabilities, remediation, reporting, security tools, and compliance evidence.</span>
+                  </div>
+
+                  <div class="action-item">
+                    <strong>Next step</strong>
+                    <span>Assign one clear owner for each major security responsibility, even if the work is shared across departments.</span>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article class="checkpoint-card reveal">
+              <div class="checkpoint-image">
+                <img src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=1200&q=85" alt="Compliance documents and audit review" />
+                <div class="image-tag">Controls, evidence, policies, SOC 2 readiness</div>
+              </div>
+
+              <div class="checkpoint-content">
+                <span class="checkpoint-number">Checkpoint 05</span>
+                <h3>Compliance Readiness</h3>
+
+                <p class="checkpoint-summary">
+                  SOC 2 becomes easier when security is already organized. The stressful part is usually
+                  not the audit itself. It is trying to prove controls, evidence, and processes after
+                  customers or auditors are already asking.
+                </p>
+
+                <div class="action-grid">
+                  <div class="action-item">
+                    <strong>Why it matters</strong>
+                    <span>Compliance becomes harder when proof is scattered across tools, people, and systems.</span>
+                  </div>
+
+                  <div class="action-item">
+                    <strong>What to check</strong>
+                    <span>Controls, policies, evidence, documentation, audit readiness, and proof that security processes are being followed.</span>
+                  </div>
+
+                  <div class="action-item">
+                    <strong>Next step</strong>
+                    <span>Start collecting proof for the controls you already have in place before customers or auditors ask for it.</span>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="scorecard" class="score-section">
+      <div class="container">
+        <div class="score-stage reveal">
+          <div class="score-head">
+            <div class="kicker">Security Risk Scorecard</div>
+            <h2>See where security may still be too informal.</h2>
+            <p>
+              Rate each checkpoint from 1 to 5 based on how confident you are that it is being
+              handled today. This is not a technical audit. It is a simple way to spot where
+              more structure may be needed.
+            </p>
+          </div>
+
+          <div class="score-layout">
+            <div class="rating-panel">
+              <div class="rating-row" data-category="access">
+                <div>
+                  <label>Access Control</label>
+                  <small>Users, vendors, admin permissions, and offboarding.</small>
+                </div>
+                <div class="rating-buttons">
+                  <button data-score="1">1</button>
+                  <button data-score="2">2</button>
+                  <button data-score="3">3</button>
+                  <button data-score="4">4</button>
+                  <button data-score="5">5</button>
+                </div>
+              </div>
+
+              <div class="rating-row" data-category="visibility">
+                <div>
+                  <label>Security Visibility</label>
+                  <small>Alerts, logs, devices, and suspicious activity.</small>
+                </div>
+                <div class="rating-buttons">
+                  <button data-score="1">1</button>
+                  <button data-score="2">2</button>
+                  <button data-score="3">3</button>
+                  <button data-score="4">4</button>
+                  <button data-score="5">5</button>
+                </div>
+              </div>
+
+              <div class="rating-row" data-category="incident">
+                <div>
+                  <label>Incident Readiness</label>
+                  <small>Response process, escalation, and communication.</small>
+                </div>
+                <div class="rating-buttons">
+                  <button data-score="1">1</button>
+                  <button data-score="2">2</button>
+                  <button data-score="3">3</button>
+                  <button data-score="4">4</button>
+                  <button data-score="5">5</button>
+                </div>
+              </div>
+
+              <div class="rating-row" data-category="ownership">
+                <div>
+                  <label>Risk Ownership</label>
+                  <small>Who owns remediation, reporting, and follow-through.</small>
+                </div>
+                <div class="rating-buttons">
+                  <button data-score="1">1</button>
+                  <button data-score="2">2</button>
+                  <button data-score="3">3</button>
+                  <button data-score="4">4</button>
+                  <button data-score="5">5</button>
+                </div>
+              </div>
+
+              <div class="rating-row" data-category="compliance">
+                <div>
+                  <label>Compliance Readiness</label>
+                  <small>SOC 2 controls, evidence, policies, and documentation.</small>
+                </div>
+                <div class="rating-buttons">
+                  <button data-score="1">1</button>
+                  <button data-score="2">2</button>
+                  <button data-score="3">3</button>
+                  <button data-score="4">4</button>
+                  <button data-score="5">5</button>
+                </div>
+              </div>
+            </div>
+
+            <aside class="result-panel">
+              <div>
+                <div class="score-label">Current Score</div>
+                <div class="score-number"><span id="scoreValue">0</span><span>/25</span></div>
+                <div class="result-title" id="resultTitle">Start the scorecard</div>
+                <div class="result-copy" id="resultCopy">
+                  Select a score for each checkpoint to see what the result may indicate.
+                </div>
+              </div>
+
+              <div class="score-scale">
+                <div class="scale-item">
+                  <strong>20–25</strong>
+                  <span>Stronger foundation</span>
+                </div>
+                <div class="scale-item">
+                  <strong>14–19</strong>
+                  <span>More structure may be needed</span>
+                </div>
+                <div class="scale-item">
+                  <strong>Under 14</strong>
+                  <span>Security may be too informal</span>
+                </div>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="container section">
+      <div class="final-panel reveal">
+        <div class="final-content">
+          <div class="kicker">Final Thought</div>
+
+          <h2>Security problems rarely start as major incidents.</h2>
+
+          <p>
+            They usually start as small gaps that go unnoticed for too long.
+            For growing SaaS companies, the goal is not to overcomplicate security.
+            The goal is to know where things stand, understand what matters most,
+            and make sure security and compliance are handled before they become urgent.
+          </p>
+
+          <p>
+            Cyber Hound Security helps growing SaaS companies strengthen security,
+            improve compliance readiness, and reduce blind spots as they scale.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <footer class="container footer">
+      <div>© Cyber Hound Security. All rights reserved.</div>
+      <div>SaaS Security Snapshot</div>
+    </footer>
+  </main>
+
+  <script>
+    const progressLine = document.getElementById("progressLine");
+
+    window.addEventListener("scroll", () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.body.scrollHeight - window.innerHeight;
+      const progress = docHeight > 0 ? scrollTop / docHeight : 0;
+      progressLine.style.transform = `scaleX(${progress})`;
+    });
+
+    const revealElements = document.querySelectorAll(".reveal");
+
+    const revealObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry, index) => {
+          if (entry.isIntersecting) {
+            setTimeout(() => {
+              entry.target.classList.add("visible");
+            }, index * 70);
+          }
+        });
+      },
+      { threshold: 0.12 }
+    );
+
+    revealElements.forEach((element) => revealObserver.observe(element));
+
+    const scores = {
+      access: 0,
+      visibility: 0,
+      incident: 0,
+      ownership: 0,
+      compliance: 0
+    };
+
+    const scoreValue = document.getElementById("scoreValue");
+    const resultTitle = document.getElementById("resultTitle");
+    const resultCopy = document.getElementById("resultCopy");
+
+    function updateScore() {
+      const values = Object.values(scores);
+      const total = values.reduce((sum, value) => sum + value, 0);
+      const completed = values.filter((value) => value > 0).length;
+
+      scoreValue.textContent = total;
+
+      if (completed < 5) {
+        resultTitle.textContent = "Keep going";
+        resultCopy.textContent = `You have scored ${completed} of 5 checkpoints. Complete the scorecard to see what the result may indicate.`;
+        return;
+      }
+
+      if (total >= 20) {
+        resultTitle.textContent = "Stronger security foundation";
+        resultCopy.textContent = "Your security foundation appears more structured, but these checkpoints should still be reviewed as the company grows.";
+      } else if (total >= 14) {
+        resultTitle.textContent = "More structure may be needed";
+        resultCopy.textContent = "You may have pieces in place, but some checkpoints could become harder to manage as security, compliance, and customer expectations increase.";
+      } else {
+        resultTitle.textContent = "Security may be too informal";
+        resultCopy.textContent = "Several checkpoints may need a closer look. When security and compliance stay informal for too long, gaps can become expensive later.";
+      }
+    }
+
+    document.querySelectorAll(".rating-row").forEach((row) => {
+      const category = row.dataset.category;
+      const buttons = row.querySelectorAll("button");
+
+      buttons.forEach((button) => {
+        button.addEventListener("click", () => {
+          buttons.forEach((btn) => btn.classList.remove("active"));
+          button.classList.add("active");
+          scores[category] = Number(button.dataset.score);
+          updateScore();
+        });
+      });
+    });
+  </script>
+</body>
+</html>
