@@ -555,6 +555,84 @@
       font-size: 15px;
     }
 
+
+    .question-box {
+      margin-top: 18px;
+      border: 1px solid rgba(216, 183, 106, 0.18);
+      background: rgba(216, 183, 106, 0.055);
+      border-radius: 20px;
+      padding: 17px 18px;
+    }
+
+    .question-box strong {
+      display: block;
+      color: #f4e6bd;
+      font-size: 13px;
+      letter-spacing: 0.04em;
+      margin-bottom: 10px;
+    }
+
+    .question-box ul {
+      list-style: none;
+      display: grid;
+      gap: 8px;
+    }
+
+    .question-box li {
+      position: relative;
+      color: #d1d1d1;
+      line-height: 1.55;
+      font-size: 14.5px;
+      padding-left: 18px;
+    }
+
+    .question-box li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.68em;
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--red-bright);
+      box-shadow: 0 0 12px rgba(255, 38, 55, 0.5);
+    }
+
+    .score-guide {
+      position: relative;
+      z-index: 1;
+      max-width: 890px;
+      margin: -22px auto 34px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(0,0,0,0.28);
+      border-radius: 24px;
+      padding: 18px;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+    }
+
+    .score-guide-item {
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.045);
+      border-radius: 16px;
+      padding: 12px 10px;
+      text-align: center;
+    }
+
+    .score-guide-item strong {
+      display: block;
+      color: white;
+      font-size: 15px;
+      margin-bottom: 4px;
+    }
+
+    .score-guide-item span {
+      color: #bdbdbd;
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
     .score-section {
       position: relative;
       padding: 108px 0;
@@ -856,6 +934,10 @@
         grid-template-columns: 1fr;
       }
 
+      .score-guide {
+        grid-template-columns: 1fr;
+      }
+
       .rating-buttons {
         justify-content: space-between;
       }
@@ -906,7 +988,7 @@
             <h3>Founder, Cyber Hound Security</h3>
             <p>
               I created this snapshot because many growing SaaS companies do not realize
-              security has become too informal until a customer, audit, or security issue
+              security has stayed too loose until a customer, audit, or security issue
               forces the conversation.
             </p>
           </div>
@@ -977,6 +1059,15 @@
                     <span>Review who has access to critical systems and remove anything that no longer has a clear business reason.</span>
                   </div>
                 </div>
+
+                <div class="question-box">
+                  <strong>Questions to ask internally</strong>
+                  <ul>
+                    <li>Do we know every user who still has access to our critical systems?</li>
+                    <li>Are admin accounts reviewed regularly, or only when something feels off?</li>
+                    <li>Are vendor and former employee accounts removed as soon as they are no longer needed?</li>
+                  </ul>
+                </div>
               </div>
             </article>
 
@@ -1012,6 +1103,15 @@
                     <span>Confirm which alerts are being reviewed, who reviews them, and how quickly suspicious activity is escalated.</span>
                   </div>
                 </div>
+
+                <div class="question-box">
+                  <strong>Questions to ask internally</strong>
+                  <ul>
+                    <li>Who reviews security alerts each day?</li>
+                    <li>How quickly would we know if a suspicious login happened?</li>
+                    <li>Are alerts actually being investigated, or are they just being collected somewhere?</li>
+                  </ul>
+                </div>
               </div>
             </article>
 
@@ -1026,7 +1126,7 @@
                 <h3>Incident Readiness</h3>
 
                 <p class="checkpoint-summary">
-                  When something happens, speed and clarity matter. If the response process is informal,
+                  When something happens, speed and clarity matter. If the response process is unclear,
                   small issues can create confusion, delays, and unnecessary damage.
                 </p>
 
@@ -1045,6 +1145,15 @@
                     <strong>Next step</strong>
                     <span>Write down the first five steps your team would take if a suspicious login, data exposure, or endpoint alert happened today.</span>
                   </div>
+                </div>
+
+                <div class="question-box">
+                  <strong>Questions to ask internally</strong>
+                  <ul>
+                    <li>Who owns the first response if something happens?</li>
+                    <li>Who decides whether leadership, customers, or vendors need to be notified?</li>
+                    <li>Would the team know what to check first, or would everyone be figuring it out in the moment?</li>
+                  </ul>
                 </div>
               </div>
             </article>
@@ -1081,6 +1190,15 @@
                     <span>Assign one clear owner for each major security responsibility, even if the work is shared across departments.</span>
                   </div>
                 </div>
+
+                <div class="question-box">
+                  <strong>Questions to ask internally</strong>
+                  <ul>
+                    <li>Who makes sure security issues actually get fixed?</li>
+                    <li>Who reports risk to leadership in a way the business can act on?</li>
+                    <li>Are remediation items tracked to completion, or do they sit in different tools and threads?</li>
+                  </ul>
+                </div>
               </div>
             </article>
 
@@ -1116,6 +1234,15 @@
                     <span>Start collecting proof for the controls you already have in place before customers or auditors ask for it.</span>
                   </div>
                 </div>
+
+                <div class="question-box">
+                  <strong>Questions to ask internally</strong>
+                  <ul>
+                    <li>Could we quickly show proof that our controls are being followed?</li>
+                    <li>Do we know where SOC 2 evidence lives, or is it spread across people and tools?</li>
+                    <li>Are policies being used in practice, or are they only written down for the audit?</li>
+                  </ul>
+                </div>
               </div>
             </article>
           </div>
@@ -1128,14 +1255,38 @@
         <div class="score-stage reveal">
           <div class="score-head">
             <div class="kicker">Security Risk Scorecard</div>
-            <h2>See where security may still be too informal.</h2>
+            <h2>See where security may still need more structure.</h2>
             <p>
               Rate each checkpoint from 1 to 5 based on how confident you are that it is being
               handled today. This is not a technical audit. It is a simple way to spot where
-              more structure may be needed.
+              the team may need clearer ownership, stronger monitoring, or better documentation.
             </p>
           </div>
 
+
+
+          <div class="score-guide">
+            <div class="score-guide-item">
+              <strong>1</strong>
+              <span>Not handled</span>
+            </div>
+            <div class="score-guide-item">
+              <strong>2</strong>
+              <span>Handled loosely</span>
+            </div>
+            <div class="score-guide-item">
+              <strong>3</strong>
+              <span>Partially handled</span>
+            </div>
+            <div class="score-guide-item">
+              <strong>4</strong>
+              <span>Mostly structured</span>
+            </div>
+            <div class="score-guide-item">
+              <strong>5</strong>
+              <span>Confident and documented</span>
+            </div>
+          </div>
           <div class="score-layout">
             <div class="rating-panel">
               <div class="rating-row" data-category="access">
@@ -1230,7 +1381,7 @@
                 </div>
                 <div class="scale-item">
                   <strong>Under 14</strong>
-                  <span>Security may be too informal</span>
+                  <span>Security may need attention</span>
                 </div>
               </div>
             </aside>
@@ -1244,10 +1395,10 @@
         <div class="final-content">
           <div class="kicker">Final Thought</div>
 
-          <h2>Security problems rarely start as major incidents.</h2>
+          <h2>Security issues rarely start as major incidents.</h2>
 
           <p>
-            They usually start as small gaps that go unnoticed for too long.
+            They usually start as small gaps that stay hidden for too long.
             For growing SaaS companies, the goal is not to overcomplicate security.
             The goal is to know where things stand, understand what matters most,
             and make sure security and compliance are handled before they become urgent.
@@ -1321,13 +1472,13 @@
 
       if (total >= 20) {
         resultTitle.textContent = "Stronger security foundation";
-        resultCopy.textContent = "Your security foundation appears more structured, but these checkpoints should still be reviewed as the company grows.";
+        resultCopy.textContent = "Your security process appears more structured, but it is still worth checking whether alerts, access, ownership, and evidence are being reviewed consistently.";
       } else if (total >= 14) {
         resultTitle.textContent = "More structure may be needed";
-        resultCopy.textContent = "You may have pieces in place, but some checkpoints could become harder to manage as security, compliance, and customer expectations increase.";
+        resultCopy.textContent = "You likely have some security practices in place, but there may be gaps around ownership, monitoring, documentation, or follow-through.";
       } else {
-        resultTitle.textContent = "Security may be too informal";
-        resultCopy.textContent = "Several checkpoints may need a closer look. When security and compliance stay informal for too long, gaps can become expensive later.";
+        resultTitle.textContent = "Security may need attention";
+        resultCopy.textContent = "Several checkpoints may need a closer look. This usually means the team may be relying too much on memory, assumptions, or scattered processes.";
       }
     }
 
